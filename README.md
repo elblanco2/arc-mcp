@@ -18,6 +18,7 @@ Arc is a Model Context Protocol (MCP) server designed to bridge the gap between 
 - [User Guide](docs/USER_GUIDE.md) - Comprehensive guide for using Arc MCP
 - [Deployment Architecture](docs/DEPLOYMENT_ARCHITECTURE.md) - Technical overview of the Arc MCP system
 - [Prompt Templates](docs/prompts/) - Ready-to-use prompts for common deployment scenarios
+- [Testing Guide](docs/TESTING_GUIDE.md) - Instructions for testing Arc MCP
 
 ## Installation
 
@@ -90,6 +91,33 @@ Arc exposes the following MCP tools to LLMs:
 5. **Troubleshoot** any issues that arise
 
 For a detailed walkthrough, see the [User Guide](docs/USER_GUIDE.md) or use one of our [Prompt Templates](docs/prompts/deploy_wasp_to_shared_hosting.md).
+
+## Development
+
+### Installing for Development
+
+```bash
+git clone https://github.com/elblanco2/arc-mcp.git
+cd arc-mcp
+pip install -e ".[dev]"
+```
+
+### Running Tests
+
+Arc MCP uses pytest for testing:
+
+```bash
+# Run all tests
+pytest
+
+# Run tests with coverage
+pytest --cov=arc
+
+# Run specific test file
+pytest tests/test_server.py
+```
+
+For more information on testing, see the [Testing Guide](docs/TESTING_GUIDE.md).
 
 ## Contributing
 
