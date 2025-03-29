@@ -1,49 +1,74 @@
-# Arc MCP
+# Arc MCP Server
 
-> Simplified web application deployment through conversational interfaces
+A Model Context Protocol (MCP) server that simplifies framework deployments on various hosting environments.
 
-Arc is a Model Context Protocol (MCP) server designed to bridge the gap between Large Language Models (LLMs) and hosting environments. It allows novice developers to deploy web applications through natural language conversations with AI assistants like Claude.
+## Overview
 
-## Features
+Arc bridges the gap between Large Language Models (LLMs) and hosting environments, allowing novice developers to deploy web applications easily through conversational interfaces. It implements the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) to expose tools, resources, and prompts that guide users through the deployment process.
 
-- **Framework Support**: Deploy Wasp applications with planned support for more frameworks
-- **Multi-Provider**: Support for shared hosting via FTP/SFTP with planned support for more providers
-- **Guided Deployments**: Conversational interface to guide users through the deployment process
-- **Smart Synchronization**: Intelligent file transfer that only uploads changed files
+### Key Features
+
+- **Framework Support**: Deploy Wasp applications with ease, with planned support for Next.js and Astro
+- **Multi-Provider**: Support for Netlify, Vercel, traditional shared hosting environments, and Hostm.com
+- **Guided Deployments**: Prompts to guide users through the deployment process
 - **Authentication Management**: Secure storage of hosting provider credentials
 - **Troubleshooting**: Built-in tools to diagnose and fix common deployment issues
+- **Windsurf Integration**: Seamless handoff to Windsurf (Codeium's VS Code) for continued development
 
-## Documentation
+## Status
 
-- [User Guide](docs/USER_GUIDE.md) - Comprehensive guide for using Arc MCP
-- [Deployment Architecture](docs/DEPLOYMENT_ARCHITECTURE.md) - Technical overview of the Arc MCP system
-- [Prompt Templates](docs/prompts/) - Ready-to-use prompts for common deployment scenarios
-- [Testing Guide](docs/TESTING_GUIDE.md) - Instructions for testing Arc MCP
+This project is currently in early development. Contributions and feedback are welcome!
 
-## Installation
+## Getting Started
+
+### Prerequisites
+
+- Python 3.10+
+- MCP Client (e.g., Claude Desktop)
+- Hosting provider accounts as needed
+
+### Installation
 
 ```bash
-pip install arc-mcp
+# Using pip
+pip install arc-mcp-server
+
+# Or install in development mode
+git clone https://github.com/elblanco2/arc-mcp.git
+cd arc-mcp
+pip install -e .
 ```
 
-## Quick Start
+### Configuration
 
-### Starting the server
+Create a `.env` file with your configuration:
+
+```
+SECURE_STORAGE_PATH=~/.arc/credentials
+```
+
+### Usage
+
+#### Running from command line
 
 ```bash
+# Start the server directly
+arc
+
+# With debug logging
 arc --debug
+
+# With a custom storage path
+arc --secure-storage-path=/path/to/credentials
 ```
 
-### Python API
+#### Using with Claude Desktop
 
-```python
-from arc.server import ArcServer
+1. Edit your Claude Desktop configuration file:
+   - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
-server = ArcServer(debug=True)
-server.start()
-```
-
-### Claude Desktop Configuration
+2. Add Arc server configuration:
 
 ```json
 {
@@ -52,7 +77,7 @@ server.start()
       "command": "python",
       "args": [
         "-m",
-        "arc",
+        "arc_mcp",
         "--debug"
       ]
     }
@@ -60,69 +85,67 @@ server.start()
 }
 ```
 
-## Supported Frameworks
+3. Restart Claude Desktop.
 
-Currently, Arc supports:
+4. Start conversations with Claude about deploying your applications!
 
-- **Wasp**: The fastest way to develop full-stack web apps with React & Node.js
+#### Using with Windsurf (Codeium)
+
+The Arc MCP server includes special integration with Windsurf, Codeium's version of VS Code, to provide a seamless development experience after deployment:
+
+1. Deploy your application using Arc.
+2. Use the "windsurf-handoff" prompt to transition to Windsurf for continued development.
+3. Windsurf's AI Flow feature will guide you through adding features and improving your application.
+
+## Architecture
+
+Arc is built on a modular architecture:
+
+- **Credentials Manager**: Securely stores and retrieves provider credentials
+- **Framework Handlers**: Framework-specific deployment logic
+- **Hosting Providers**: Provider-specific deployment operations
+- **MCP Interface**: Exposes tools, resources, and prompts via the Model Context Protocol
 
 ## Supported Providers
 
-Currently, Arc supports:
+| Provider | Status | Features |
+|----------|--------|----------|
+| Netlify | Complete | Serverless, Edge, Forms |
+| Vercel | Complete | Serverless, Edge, Analytics |
+| Shared Hosting | Complete | SSH/SFTP, PHP, MySQL |
+| Hostm.com | Complete | Shared Hosting, API Access |
 
-- **Shared Hosting**: Traditional web hosting with FTP/SFTP access
+## Supported Frameworks
 
-## Available MCP Tools
-
-Arc exposes the following MCP tools to LLMs:
-
-1. `authenticate_provider`: Store authentication credentials for a hosting provider
-2. `check_server_status`: Check the status of the configured server
-3. `analyze_requirements`: Analyze deployment requirements for a framework/provider combination
-4. `deploy_framework`: Deploy a framework to the specified hosting provider
-5. `troubleshoot_deployment`: Analyze deployment errors and suggest solutions
-
-## Example Deployment Workflow
-
-1. **Authenticate** with your hosting provider
-2. **Analyze** your project's requirements
-3. **Configure** deployment parameters
-4. **Deploy** your application
-5. **Troubleshoot** any issues that arise
-
-For a detailed walkthrough, see the [User Guide](docs/USER_GUIDE.md) or use one of our [Prompt Templates](docs/prompts/deploy_wasp_to_shared_hosting.md).
-
-## Development
-
-### Installing for Development
-
-```bash
-git clone https://github.com/elblanco2/arc-mcp.git
-cd arc-mcp
-pip install -e ".[dev]"
-```
-
-### Running Tests
-
-Arc MCP uses pytest for testing:
-
-```bash
-# Run all tests
-pytest
-
-# Run tests with coverage
-pytest --cov=arc
-
-# Run specific test file
-pytest tests/test_server.py
-```
-
-For more information on testing, see the [Testing Guide](docs/TESTING_GUIDE.md).
+| Framework | Status | Features |
+|-----------|--------|----------|
+| Wasp | Complete | Full-Stack JS Framework |
+| Next.js | Planned | React Framework |
+| Astro | Planned | Static Site Generator |
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+### Development
+
+```bash
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Run linting
+flake8
+```
+
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [Model Context Protocol](https://modelcontextprotocol.io/) for enabling this integration
+- [Wasp](https://wasp-lang.dev/) for the excellent framework used in our initial support
+- [Windsurf](https://codeium.com/windsurf) for AI-powered development environment integration
